@@ -13,20 +13,28 @@ function App() {
   const [click, setClick] = useState(false)
   const [reqList, setReqList] = useState(["1", "2", "3"])
 
+
+  function editList(){
+    console.log(editID.current.value)
+    let edited_req = reqList.map(()=>{return editID.current.value})
+    setReqList(edited_req)
+  }
+
+
   function updateList(){
     setReqList([...reqList, refID.current.value])
   }
 
   function ItemList(){
     if(editClick==false){
-      return(<>{reqList.map(request => <li>{request} 
+      return(<>{reqList.map((request,i) => <li key={i}>{request} 
       <button onClick={()=>{setEditClick(!editClick)}}>Edit</button> </li>)}
       </>)
     }
     else{
       return(<>{reqList.map(request => <li>{request} 
-        <input type="text"/>
-        <button onClick={()=>{setEditClick(!editClick)}}>Save</button> 
+        <input type="text" ref={editID}/>
+        <button onClick={()=>{}}>Save</button> 
         <button onClick={()=>{setEditClick(!editClick)}}>Cancel</button> 
         </li>)}
         </>)
@@ -49,7 +57,7 @@ function App() {
         <label> Channel ID 
           <input type="text" ref={refID}/>
         </label>
-        <button onClick={updateList}> Save </button>
+        <button onClick={()=>{updateList()}}> Save </button>
         <button onClick={()=>{setClick(!click)}}> Cancel </button>
       </>
     )
