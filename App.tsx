@@ -8,21 +8,33 @@ import './App.css'
 
 function App() {
   const refID = useRef<any>()
-  const editID = useRef<any>()
+  let editID = useRef<any>()
+  const [tempInput, setTempInput] = useState<any>()
   const [editClick, setEditClick] = useState(false)
   const [click, setClick] = useState(false)
-  const [reqList, setReqList] = useState(["1", "2", "3"])
+  const [reqList, setReqList] = useState(["Utrecht", "Maastricht", "Nijmegen"])
 
 
-  function editList(){
-    console.log(editID.current.value)
-    let edited_req = reqList.map(()=>{return editID.current.value})
+  function editList(index: number){
+    console.log(tempInput)
+    let edited_req = reqList.map((c,i)=>{
+      if (i===index){
+        return tempInput
+      }
+      else{
+        return c
+      }
+     })
     setReqList(edited_req)
   }
 
 
   function updateList(){
     setReqList([...reqList, refID.current.value])
+  }
+
+  function Item(){
+    //Need to decouple item states from item list
   }
 
   function ItemList(){
@@ -32,9 +44,10 @@ function App() {
       </>)
     }
     else{
-      return(<>{reqList.map(request => <li>{request} 
-        <input type="text" ref={editID}/>
-        <button onClick={()=>{}}>Save</button> 
+      //Edit item menu
+      return(<>{reqList.map((request,i) => <li key={i}>{request} 
+        <input type="text" value={tempInput} onChange={e=>{setTempInput(e.target.value)}}/>
+        <button onClick={()=>{editList(i)}}>Save</button> 
         <button onClick={()=>{setEditClick(!editClick)}}>Cancel</button> 
         </li>)}
         </>)
