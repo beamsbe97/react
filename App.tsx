@@ -46,7 +46,7 @@ function App() {
     else{
       //Edit item menu
       return(<>{reqList.map((request,i) => <li key={i}>{request} 
-        <input type="text" value={tempInput} onChange={e=>{setTempInput(e.target.value)}}/>
+        <input type="text" value={tempInput} onChange={e=>{setTempInput(e.target.value)}} autoFocus/>
         <button onClick={()=>{editList(i)}}>Save</button> 
         <button onClick={()=>{setEditClick(!editClick)}}>Cancel</button> 
         </li>)}
