@@ -4,84 +4,59 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
-
-
-
-
-function editList(index: number){
-  console.log(tempInput)
-  let edited_req = reqList.map((c,i)=>{
-    if (i===index){
-      return tempInput
-    }
-    else{
-      return c
-    }
-    })
-  setReqList(edited_req)
-}
-
-
-function updateList(){
-  setReqList([...reqList, refID.current.value])
-}
-
-function Item(){
-  //Need to decouple item states from item list
-}
-
-function ItemList(){
-  const [reqList, setReqList] = useState(["Utrecht", "Maastricht", "Nijmegen"])
-  
-  if(editClick==false){
-    return(<>{reqList.map((request,i) => <li key={i}>{request} 
-    <button onClick={()=>{setEditClick(!editClick)}}>Edit</button> </li>)}
-    </>)
-  }
-  else{
-    //Edit item menu
-    return(<>{reqList.map((request,i) => <li key={i}>{request} 
-      <input type="text" value={tempInput} onChange={e=>{setTempInput(e.target.value)}} autoFocus/>
-      <button onClick={()=>{editList(i)}}>Save</button> 
-      <button onClick={()=>{setEditClick(!editClick)}}>Cancel</button> 
-      </li>)}
-      </>)
-  }
-
-}
-
-
 function App() {
-  const refID = useRef<any>()
-  let editID = useRef<any>()
-  const [tempInput, setTempInput] = useState<any>()
+  const addID = useRef<any>()
+  const [reqList, setReqList] = useState(["Utrecht", "Maastricht", "Nijmegen"])
   const [editClick, setEditClick] = useState(false)
-  const [click, setClick] = useState(false)
-  
-
-
-  if(!click){
-    return (
-      <>
-        <ItemList/>
-        <button onClick={()=>{setClick(!click)}}>+</button>
-      </>
-    )
+  const [addClick, setAddClick] = useState(false)
+  const [editIndex, setEditIndex] = useState<number>()
+  function handleEditSave(index: number, userInput: string){
+    const tempList = reqList.map((request,i)=>{
+      if(i===index){
+        return userInput
+      }else{
+        return request
+      }
+    })
+    setEditClick(!editClick)
+    setReqList(tempList)
   }
-  else{
-    return (
-      <>
-        <ItemList/>
-        <label> Channel ID 
-          <input type="text" ref={refID}/>
-        </label>
-        <button onClick={()=>{updateList()}}> Save </button>
-        <button onClick={()=>{setClick(!click)}}> Cancel </button>
-      </>
-    )
- ; 
-}
-}
 
+  function handleEdit(index: number){
+    setEditClick(true)
+    setEditIndex(index)
+  }
+
+  function handleAdd(){
+    setReqList([...reqList, addID.current.value])
+  }
+  return(
+    <>
+      <>{reqList.map((request,i) => <li>{request}  
+      {(editClick && i===editIndex)?(
+        <>
+          <input type='text' id={i.toString()}></input>
+          <button onClick={()=>{handleEditSave(i,((document.getElementById(i.toString()) as HTMLInputElement).value))}}>Save</button>
+          <button onClick={()=>{setEditClick(!editClick)}}>Cancel</button>
+        </>
+      ):(
+        <button onClick={()=>{handleEdit(i)}}>Edit</button>
+      )}
+      </li>)}</>
+      {
+        addClick?(
+          <>
+            <input type="text" ref={addID}></input>  
+            <button onClick={()=>{handleAdd()}}>Save</button>  
+            <button onClick={()=>{setAddClick(!addClick)}}>Cancel</button>      
+          </>
+        ):(
+          <button onClick={()=>{setAddClick(true)}}>+</button>
+        )
+      }
+    </>
+  )
+
+}
 
 export default App
