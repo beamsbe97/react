@@ -3,13 +3,19 @@ import { useRef } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import Card from './Card.tsx'
 
 function App() {
   const addID = useRef<any>()
   const [reqList, setReqList] = useState(["Utrecht", "Maastricht", "Nijmegen"])
   const [editClick, setEditClick] = useState(false)
   const [addClick, setAddClick] = useState(false)
+  const [addCardClick, setAddCardClick] = useState<boolean>(false)
   const [editIndex, setEditIndex] = useState<number>()
+
+  const [cardList, setCardList] = useState([{chid:123456, did: "B68S"}, 
+                                            {chid:789420, did: "N58R"}])
+  const [testCard, setTestCard] = useState([])
   function handleEditSave(index: number, userInput: string){
     const tempList = reqList.map((request,i)=>{
       if(i===index){
@@ -28,8 +34,17 @@ function App() {
   }
 
   function handleAdd(){
+    setAddClick(!addClick)
     setReqList([...reqList, addID.current.value])
   }
+
+
+  function handleCardAdd(){
+    setAddCardClick(!addCardClick)
+    return(<Card />)
+  }
+
+
   return(
     <>
       <>{reqList.map((request,i) => <li>{request}  
@@ -54,7 +69,18 @@ function App() {
           <button onClick={()=>{setAddClick(true)}}>+</button>
         )
       }
+    <>{cardList.map(card => <Card did={card.did} chid={card.chid} addNew={false}/>)}</>
+    {addCardClick?(
+      <>
+        <button onClick={()=>{}}>Save</button>
+      </>
+    ):(
+      <><button onClick={()=>{handleCardAdd()}}>Add Request</button></>
+    )}
+    
+
     </>
+
   )
 
 }
