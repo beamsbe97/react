@@ -15,7 +15,11 @@ function App() {
 
   const [cardList, setCardList] = useState([{chid:123456, did: "B68S"}, 
                                             {chid:789420, did: "N58R"}])
-  const [testCard, setTestCard] = useState([])
+  
+  function newCard(childData){
+    setCardList([...cardList, childData])
+  }
+
   function handleEditSave(index: number, userInput: string){
     const tempList = reqList.map((request,i)=>{
       if(i===index){
@@ -37,13 +41,6 @@ function App() {
     setAddClick(!addClick)
     setReqList([...reqList, addID.current.value])
   }
-
-
-  function handleCardAdd(){
-    setAddCardClick(!addCardClick)
-    return(<Card did={''} chid={''} addNew={true}/>)
-  }
-
 
   return(
     <>
@@ -69,11 +66,12 @@ function App() {
           <button onClick={()=>{setAddClick(true)}}>+</button>
         )
       }
-    <>{cardList.map(card => <Card did={card.did} chid={card.chid.toString()} addNew={false}/>)}</>
+    <>{cardList.map(card => <Card did={card.did} chid={card.chid.toString()} addNew={false} newCard={0}/>)}</>
     {addCardClick?(
-      <></>
+      <> <Card did={""} chid={""} addNew={true} newCard={newCard}/>
+      </>
     ):(
-      <><button onClick={()=>{handleCardAdd()}}>Add Request</button></>
+      <><button onClick={()=>{setAddCardClick(!addCardClick)}}>Add Request</button></>
     )}
     
 

@@ -1,12 +1,14 @@
 import { useState } from "react"
 
-function Card(props:{did:string, chid:string, addNew: boolean}){
+function Card(props:{did:string, chid:string, addNew: boolean, newCard:any}){
     const [editClick, setEditClick] = useState<boolean>(false)
     const [addClick, setAddClick] = useState<boolean>(props.addNew)
 
     function handleNewSave(inputDID: string, inputChID: string){
-        props.did=inputDID
-        props.chid=inputChID
+        console.log(inputChID)
+        console.log(inputDID)
+        props.newCard({chid: inputChID.toString(), did:inputDID})
+
         setAddClick(!addClick)
     }
 
@@ -14,11 +16,16 @@ function Card(props:{did:string, chid:string, addNew: boolean}){
         setEditClick(!editClick)
     }
     return(addClick?(
-        <>
-            <input type="text" id="inputID">New Channel ID:</input>
-            <input type="text" id="inputDID">DID</input>
+
+        <><div className="card">
+            <h2>hi mum</h2>
+            <ul>
+            <label>New DID:<input type="text" id="inputDID"></input></label>
+            <label>New Channel ID:<input type="text" id="inputID"></input></label>
+            </ul>
             <button onClick={()=>{handleNewSave(((document.getElementById("inputDID") as HTMLInputElement).value),
-                                                ((document.getElementById("inputID") as HTMLInputElement).value))}}>Save</button>
+                                                  ((document.getElementById("inputID") as HTMLInputElement).value))}}>Save</button>
+            <button onClick={()=>{setAddClick(!addClick)}}>Cancel</button></div>
         </>
     ):(<>
         <div className="card">
@@ -46,15 +53,13 @@ function Card(props:{did:string, chid:string, addNew: boolean}){
             <button className="buttons" onClick={()=>{handleEdit()}}>Edit</button>   
             )}
             
-            
-            
             </h2>
 
         </div>
     </>))
 }
 
-Card.defaultProps
+
 
 
 export default Card
