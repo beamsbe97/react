@@ -41,7 +41,7 @@ function App() {
 
   function handleCardAdd(){
     setAddCardClick(!addCardClick)
-    return(<Card />)
+    return(<Card did={''} chid={''} addNew={true}/>)
   }
 
 
@@ -69,11 +69,9 @@ function App() {
           <button onClick={()=>{setAddClick(true)}}>+</button>
         )
       }
-    <>{cardList.map(card => <Card did={card.did} chid={card.chid} addNew={false}/>)}</>
+    <>{cardList.map(card => <Card did={card.did} chid={card.chid.toString()} addNew={false}/>)}</>
     {addCardClick?(
-      <>
-        <button onClick={()=>{}}>Save</button>
-      </>
+      <></>
     ):(
       <><button onClick={()=>{handleCardAdd()}}>Add Request</button></>
     )}

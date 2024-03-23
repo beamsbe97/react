@@ -1,16 +1,24 @@
 import { useState } from "react"
 
-export default function Card(props: {did:string, chid:number, addNew: boolean}){
+function Card(props:{did:string, chid:string, addNew: boolean}){
     const [editClick, setEditClick] = useState<boolean>(false)
-    
+    const [addClick, setAddClick] = useState<boolean>(props.addNew)
+
+    function handleNewSave(inputDID: string, inputChID: string){
+        props.did=inputDID
+        props.chid=inputChID
+        setAddClick(!addClick)
+    }
+
     function handleEdit(){
         setEditClick(!editClick)
     }
-    return(props.addNew?(
+    return(addClick?(
         <>
             <input type="text" id="inputID">New Channel ID:</input>
-            <input type="text">DID</input>
-            <input type="text"></input>
+            <input type="text" id="inputDID">DID</input>
+            <button onClick={()=>{handleNewSave(((document.getElementById("inputDID") as HTMLInputElement).value),
+                                                ((document.getElementById("inputID") as HTMLInputElement).value))}}>Save</button>
         </>
     ):(<>
         <div className="card">
@@ -46,3 +54,7 @@ export default function Card(props: {did:string, chid:number, addNew: boolean}){
     </>))
 }
 
+Card.defaultProps
+
+
+export default Card
