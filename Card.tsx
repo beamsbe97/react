@@ -1,10 +1,11 @@
 import { useState } from "react"
 
-function Card(props:{did:string, chid:string, addNew: boolean, action:any, cardIndex:any, renderAdd:any}){
+function Card(props:{did:string, chid:string, addNew: boolean, action:any, cardIndex:any, renderAdd:any, status:string}){
     const [editClick, setEditClick] = useState<boolean>(false)
     const [addClick, setAddClick] = useState<boolean>(props.addNew)
-    const dataFields = ["Channel ID", "DID"]
-    const fieldVals = [props.chid, props.did]
+    const dataFields = ["Channel ID", "DID", "Status"]
+    const fieldVals = [props.chid, props.did, props.status]
+
 
     function handleNewSave(inputDID: string, inputChID: string){
         console.log(inputChID)
@@ -20,6 +21,7 @@ function Card(props:{did:string, chid:string, addNew: boolean, action:any, cardI
     }
 
     function handleEditSave(){
+
         let inputID = props.chid
         let inputDID = props.did
         if((document.getElementById("1") as HTMLInputElement).value.length>0){
@@ -30,7 +32,7 @@ function Card(props:{did:string, chid:string, addNew: boolean, action:any, cardI
             inputID = (document.getElementById("0") as HTMLInputElement).value
         }
     
-        props.action(props.cardIndex, inputDID, inputID)
+        props.action(props.cardIndex, inputDID, inputID, )
         setEditClick(!editClick)
     }
     return(addClick?(
@@ -49,16 +51,20 @@ function Card(props:{did:string, chid:string, addNew: boolean, action:any, cardI
             {editClick?(
             <>
                 {dataFields.map((field,i)=><ul>{field.concat(": ", fieldVals[i])}
-                <input className="input" type="text" id={i.toString()}></input>
+                {field==="Status"?(<>
+                <select className="input">
+                    <option >Pending</option>
+                    <option >Confirmed</option>
+                    <option >Completed</option>
+                </select> 
+                </>):(<>
+                    <input className="input" type="text" id={i.toString()}></input>
+                </>)}
+                
                 </ul>)}
                 <button className="button" onClick={()=>{handleEditSave()}}>Save</button>
                 <button className="button" onClick={()=>{setEditClick(!editClick)}}>Cancel</button>
-                <select>
-                    <option >Pending SPC</option>
-                    <option >Pending YE </option>
-                    <option >Confirmation Step</option>
-                    <option >Completed</option>
-                </select>
+                
             </>
             ):(
             <>
