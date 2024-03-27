@@ -9,8 +9,7 @@ function App() {
   const [addCardClick, setAddCardClick] = useState<boolean>(false)
   const [cardList, setCardList] = useState([{chid:123456, did: "B68S", status:"Pending"}, 
                                             {chid:789420, did: "N58R", status:"Confirmed"}])
-  const [status, setStatus] = useState<string>()
-  
+
   function newCard(childData: any){
     setCardList([...cardList, childData])
   }
@@ -19,13 +18,10 @@ function App() {
     setAddCardClick(toRender)
   }
 
-  function deleteCard(index: number){
-    const tempList = cardList.filter((card, i)=> i!==index)
-  }
 
-  function cardEditSave(index: number, inputDID: string, inputID: any, statusInput: string){
+  function cardEditSave(index: number, inputDID: string, inputID: any, statusInput: string, deleteClick:boolean){
 
-    const tempList = cardList.map((card, i)=> {
+    let tempList = cardList.map((card, i)=> {
       if(i===index){
         return({chid: inputID, did: inputDID, status: statusInput})
       }
@@ -33,7 +29,11 @@ function App() {
         return card
       }
     })
-    setStatus(statusInput)
+
+    if (deleteClick){
+      tempList = cardList.filter((_, i)=> i!==index)
+    }
+
     setCardList(tempList)
   }
 

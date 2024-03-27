@@ -5,7 +5,7 @@ function Card(props:{did:string, chid:string, addNew: boolean, action:any, cardI
     const [addClick, setAddClick] = useState<boolean>(props.addNew)
     const dataFields = ["Channel ID", "DID", "Status"]
     const fieldVals = [props.chid, props.did, props.status]
-
+    const [deleteClick, setDeleteClick] = useState<boolean>(false)
 
     function handleNewSave(inputDID: string, inputChID: string){
         console.log(inputChID)
@@ -21,7 +21,7 @@ function Card(props:{did:string, chid:string, addNew: boolean, action:any, cardI
     }
 
     function handleEditSave(){
-
+        console.log((document.getElementById("reqStatus") as HTMLInputElement).value)
         let inputID = props.chid
         let inputDID = props.did
         if((document.getElementById("1") as HTMLInputElement).value.length>0){
@@ -32,7 +32,12 @@ function Card(props:{did:string, chid:string, addNew: boolean, action:any, cardI
             inputID = (document.getElementById("0") as HTMLInputElement).value
         }
     
-        props.action(props.cardIndex, inputDID, inputID, )
+        deleteClick?(
+            props.action(props.cardIndex, inputDID, inputID, (document.getElementById("reqStatus") as HTMLInputElement).value, true) //delete card
+        ):(
+            props.action(props.cardIndex, inputDID, inputID, (document.getElementById("reqStatus") as HTMLInputElement).value, false) //only make changes
+        )
+        
         setEditClick(!editClick)
     }
     return(addClick?(
@@ -52,7 +57,7 @@ function Card(props:{did:string, chid:string, addNew: boolean, action:any, cardI
             <>
                 {dataFields.map((field,i)=><ul>{field.concat(": ", fieldVals[i])}
                 {field==="Status"?(<>
-                <select className="input">
+                <select className="input" defaultValue="Pending" id="reqStatus">
                     <option >Pending</option>
                     <option >Confirmed</option>
                     <option >Completed</option>
@@ -62,6 +67,8 @@ function Card(props:{did:string, chid:string, addNew: boolean, action:any, cardI
                 </>)}
                 
                 </ul>)}
+                <ul><button className="button" onClick={()=>{setDeleteClick(!deleteClick)}}>Delete request</button></ul>
+                <ul><label><input type="checkbox" className="deletebox"/> Delete</label></ul>
                 <button className="button" onClick={()=>{handleEditSave()}}>Save</button>
                 <button className="button" onClick={()=>{setEditClick(!editClick)}}>Cancel</button>
                 
@@ -70,14 +77,11 @@ function Card(props:{did:string, chid:string, addNew: boolean, action:any, cardI
             <>
                 {dataFields.map((field,i)=><ul>{field.concat(": ", fieldVals[i])}</ul>)}
                 <button className="button" onClick={()=>{setEditClick(!editClick)}}>Edit</button>
+                
             </>)}
 
         </div>
-        </>):(
-        <>
-        
-        
-        </>)}
+        </>):(<></>)}
         
     </>))
 }
