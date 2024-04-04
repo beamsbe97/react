@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { createConnection } from './chat.js';
 import { useRef } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
@@ -9,6 +10,13 @@ function App() {
   const [addCardClick, setAddCardClick] = useState<boolean>(false)
   const [cardList, setCardList] = useState([{chid:123456, did: "B68S", status:"Pending"}, 
                                             {chid:789420, did: "N58R", status:"Confirmed"}])
+
+  useEffect(()=>{
+    fetch('http://127.0.0.1:8000/',{
+      method:'GET'
+    }).then(response => console.log(response.text))
+
+  })
 
   function newCard(childData: any){
     setCardList([...cardList, childData])
@@ -42,9 +50,13 @@ function App() {
     <>{cardList.map((card,i) => <Card did={card.did} chid={card.chid.toString()} addNew={false} action={cardEditSave} cardIndex={i} renderAdd={renderAddBt} status={card.status}/>)}</>
     {addCardClick?(
       <> <Card did={""} chid={""} addNew={true} action={newCard} cardIndex="" renderAdd={renderAddBt} status={""}/>
+      
       </>
     ):(
-      <><button className='button' onClick={()=>{setAddCardClick(!addCardClick)}}>Add Request</button></>
+      <><button className='button' onClick={()=>{setAddCardClick(!addCardClick)}}>Add Request</button>
+
+      </>
+      
     )}
     
 
