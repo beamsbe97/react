@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { createConnection } from './chat.js';
 import { useRef } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
@@ -11,10 +10,26 @@ function App() {
   const [cardList, setCardList] = useState([{chid:123456, did: "B68S", status:"Pending"}, 
                                             {chid:789420, did: "N58R", status:"Confirmed"}])
 
+  let reqData:any
+
   useEffect(()=>{
-    fetch('http://127.0.0.1:8000/',{
-      method:'GET'
-    }).then(response => console.log(response.text))
+
+    const fetchData = async()=>{
+      const res = await fetch('http://127.0.0.1:8000/',{method:'GET'})
+      const resJson = await res.json()
+      console.log(resJson)
+      return resJson
+    }
+
+    try{
+      fetchData()
+      
+    }
+
+    catch(e){
+      console.log(e)
+    }
+    console.log(reqData)
 
   })
 
